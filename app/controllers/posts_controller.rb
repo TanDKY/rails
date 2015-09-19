@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :autenticate
 
   # GET /posts
   # GET /posts.json
@@ -25,6 +26,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
+    @post.user_id = @user.id
 
     respond_to do |format|
       if @post.save
@@ -70,5 +72,9 @@ class PostsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
       params.require(:post).permit(:user_id, :title, :body)
+    end
+
+    def autenticate
+        @user = current_user
     end
 end
