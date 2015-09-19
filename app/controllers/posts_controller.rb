@@ -12,22 +12,26 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @tags = @post.tags
   end
 
   # GET /posts/new
   def new
     @post = Post.new
+    @tags = Tag.al
   end
 
   # GET /posts/1/edit
   def edit
+    @tags = Tag.all
   end
 
   # POST /posts
   # POST /posts.json
   def create
     @post = Post.new(post_params)
-    @post.user_id = @user.id
+    tag_add
+    @post.user = @user
 
     respond_to do |format|
       if @post.save
@@ -43,6 +47,7 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+    tag_add
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
@@ -85,5 +90,12 @@ class PostsController < ApplicationController
         redirect_to posts_path
       end
     end
-    
+
+    def tag_add
+      if Tag.all.size != 0 && params[:tag_ids]
+        @tags = Tag.find(params[:tag_ids])
+        @post.tags = @tags
+      end
+    end
+
 end

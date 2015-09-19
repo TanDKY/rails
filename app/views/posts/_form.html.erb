@@ -23,6 +23,17 @@
     <%= f.label :body %><br>
     <%= f.text_area :body %>
   </div>
+  <div class="field">
+    Select Tags<br>
+    <% @tags.each do |tag| %>
+      <% if @post.tags.exists?(tag.id) %>
+        <%= check_box_tag "tag_ids[]", tag.id, true %>
+      <% else %>
+        <%= check_box_tag "tag_ids[]", tag.id %>
+      <% end %>
+      <%= f.label tag.name %><br>
+    <% end %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
