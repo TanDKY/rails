@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :autenticate
+  before_action :check_owner, only: [:edit, :update, :destroy]
 
   # GET /posts
   # GET /posts.json
@@ -77,4 +78,12 @@ class PostsController < ApplicationController
     def autenticate
         @user = current_user
     end
+
+    def check_owner
+      if @post.user_id != @user.id
+        flash[:notice] = 'Access denied'
+        redirect_to posts_path
+      end
+    end
+    
 end
